@@ -53,7 +53,7 @@ export function RadialGauge({
   }, [value, isLoading, motionValue]);
 
   return (
-    <div className="flex flex-col items-center gap-2 rounded-lg border border-card-border bg-card p-4 transition-shadow hover:shadow-[0_0_20px_var(--color-accent-glow)]">
+    <div className="flex h-full flex-col items-center justify-center gap-2 rounded-lg border border-card-border bg-card p-4 transition-shadow hover:shadow-[0_0_20px_var(--color-accent-glow)]">
       <p className="text-xs font-medium uppercase tracking-wider text-muted">
         {label}
       </p>

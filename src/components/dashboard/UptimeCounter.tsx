@@ -52,8 +52,8 @@ export function UptimeCounter({
   const { d, h, m, s } = formatUptime(totalSeconds);
 
   return (
-    <div className="rounded-lg border border-card-border bg-card p-4 transition-shadow hover:shadow-[0_0_20px_var(--color-accent-glow)]">
-      <p className="mb-2 text-xs font-medium uppercase tracking-wider text-muted">
+    <div className="flex h-full flex-col items-center justify-center gap-2 rounded-lg border border-card-border bg-card p-4 transition-shadow hover:shadow-[0_0_20px_var(--color-accent-glow)]">
+      <p className="text-xs font-medium uppercase tracking-wider text-muted">
         Cluster Uptime
       </p>
       {isLoading ? (
@@ -65,8 +65,8 @@ export function UptimeCounter({
           <Segment value={h} label="hrs" />
           <span className="pb-4 font-mono text-lg text-muted">:</span>
           <Segment value={m} label="min" />
-          <span className="pb-4 font-mono text-lg text-muted">:</span>
-          <Segment value={s} label="sec" />
+          <span className="hidden pb-4 font-mono text-lg text-muted sm:block">:</span>
+          <span className="hidden sm:block"><Segment value={s} label="sec" /></span>
         </div>
       )}
     </div>

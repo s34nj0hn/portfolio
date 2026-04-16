@@ -70,28 +70,28 @@ export function DashboardGrid() {
         </div>
       ) : (
         <motion.div
-          className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4"
+          className="grid grid-cols-2 gap-4 sm:grid-cols-3"
           variants={gridVariants}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: "-60px" }}
         >
-          <motion.div variants={cardVariants}>
+          <motion.div variants={cardVariants} className="h-full">
             <MetricCard label="Nodes" value={data?.node_count ?? "—"} isLoading={isLoading} />
           </motion.div>
-          <motion.div variants={cardVariants}>
+          <motion.div variants={cardVariants} className="h-full">
             <PodDonut running={data?.running_pods ?? 0} succeeded={data?.succeeded_pods ?? 0} total={data?.total_pods ?? 0} isLoading={isLoading} />
           </motion.div>
-          <motion.div variants={cardVariants}>
+          <motion.div variants={cardVariants} className="h-full">
             <RadialGauge label="CPU" value={data?.cpu_usage_pct ?? 0} isLoading={isLoading} />
           </motion.div>
-          <motion.div variants={cardVariants}>
+          <motion.div variants={cardVariants} className="h-full">
             <RadialGauge label="Memory" value={data?.memory_usage_pct ?? 0} isLoading={isLoading} />
           </motion.div>
-          <motion.div variants={cardVariants}>
+          <motion.div variants={cardVariants} className="h-full">
             <UptimeCounter baseSeconds={data?.cluster_uptime_seconds ?? 0} lastUpdated={lastUpdated} isLoading={isLoading} />
           </motion.div>
-          <motion.div variants={cardVariants}>
+          <motion.div variants={cardVariants} className="h-full">
             <StorageWidget pvcBound={data?.pvc_bound ?? 0} isLoading={isLoading} />
           </motion.div>
         </motion.div>

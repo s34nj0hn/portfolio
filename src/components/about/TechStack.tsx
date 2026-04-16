@@ -17,7 +17,7 @@ const categories = [
     name: "Infrastructure",
     skills: [
       "Kubernetes", "K3s", "Docker", "Terraform", "Helm",
-      "GitOps/FluxCD", "CI/CD", "Cloudflare Tunnels",
+      "GitOps/FluxCD", "CI/CD", "Cloudflare Tunnels", "NetworkPolicies",
     ],
   },
   {
@@ -29,7 +29,7 @@ const categories = [
   },
   {
     name: "Observability",
-    skills: ["Prometheus", "Grafana", "SOPS", "Longhorn", "NetworkPolicies"],
+    skills: ["Prometheus", "Grafana", "SOPS", "Longhorn"],
   },
   {
     name: "Compliance",
@@ -40,7 +40,6 @@ const categories = [
 export function TechStack() {
   return (
     <section className="mx-auto w-full max-w-5xl px-6">
-      <h2 className="mb-8 text-lg font-semibold">Technical Skills</h2>
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {categories.map((cat) => (
           <div key={cat.name}>
@@ -51,7 +50,7 @@ export function TechStack() {
               {cat.skills.map((skill) => (
                 <span
                   key={skill}
-                  className="rounded border border-card-border bg-card px-2 py-0.5 font-mono text-[11px] text-muted transition-colors hover:border-accent/30 hover:text-foreground"
+                  className="whitespace-nowrap rounded border border-card-border bg-card px-2 py-0.5 font-mono text-[11px] text-muted transition-colors hover:border-accent/30 hover:text-foreground"
                 >
                   {skill}
                 </span>

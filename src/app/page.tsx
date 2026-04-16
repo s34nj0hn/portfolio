@@ -102,19 +102,29 @@ export default function Home() {
           </motion.div>
         </motion.div>
 
-        {/* Career & Skills Section */}
-        <motion.div 
-          initial="hidden" 
-          whileInView="visible" 
+        {/* Career Section */}
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
           viewport={{ once: true, margin: "-100px" }}
           variants={containerVariants}
-          className="mx-auto w-full max-w-5xl px-6 grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24"
+          className="mx-auto w-full max-w-5xl px-6"
         >
-          <motion.div variants={itemVariants} className="lg:col-span-8">
+          <motion.div variants={itemVariants}>
             <Timeline />
           </motion.div>
-          <motion.div variants={itemVariants} className="lg:col-span-4">
-            <h3 className="text-xl font-bold mb-8">Technical Stack</h3>
+        </motion.div>
+
+        {/* Skills Section */}
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          variants={containerVariants}
+          className="mx-auto w-full max-w-5xl px-6"
+        >
+          <motion.div variants={itemVariants}>
+            <h2 className="text-2xl font-bold mb-8">Technical Stack</h2>
             <TechStack />
           </motion.div>
         </motion.div>
