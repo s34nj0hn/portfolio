@@ -58,10 +58,10 @@ export function DashboardGrid() {
           </p>
         </div>
       ) : (
-        <div className=\"grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4\">
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
           <MetricCard
-            label=\"Nodes\"
-            value={data?.node_count ?? \"—\"}
+            label="Nodes"
+            value={data?.node_count ?? "—"}
             isLoading={isLoading}
           />
           <PodDonut
@@ -71,21 +71,22 @@ export function DashboardGrid() {
             isLoading={isLoading}
           />
           <RadialGauge
-            label=\"CPU\"
+            label="CPU"
             value={data?.cpu_usage_pct ?? 0}
             isLoading={isLoading}
           />
           <RadialGauge
-            label=\"Memory\"
+            label="Memory"
             value={data?.memory_usage_pct ?? 0}
             isLoading={isLoading}
           />
           <UptimeCounter
-            seconds={data?.cluster_uptime_seconds ?? 0}
+            baseSeconds={data?.cluster_uptime_seconds ?? 0}
+            lastUpdated={lastUpdated}
             isLoading={isLoading}
           />
           <StorageWidget
-            count={data?.pvc_bound ?? 0}
+            pvcBound={data?.pvc_bound ?? 0}
             isLoading={isLoading}
           />
         </div>
