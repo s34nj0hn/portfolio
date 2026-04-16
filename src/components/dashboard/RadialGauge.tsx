@@ -79,22 +79,20 @@ export function RadialGauge({
                 </feMerge>
               </filter>
             </defs>
-            {/* Background track */}
             <circle
               cx={size / 2}
               cy={size / 2}
               r={radius}
               fill="none"
-              stroke="var(--color-card-border)"
+              style={{ stroke: "var(--color-card-border)" }}
               strokeWidth={strokeWidth}
             />
-            {/* Animated value arc */}
             <motion.circle
               cx={size / 2}
               cy={size / 2}
               r={radius}
               fill="none"
-              stroke={color}
+              style={{ stroke: color }}
               strokeWidth={strokeWidth}
               strokeLinecap="round"
               strokeDasharray={circumference}
@@ -103,24 +101,13 @@ export function RadialGauge({
               initial={{ strokeDashoffset: circumference }}
               transition={{ duration: 1.2, ease: "easeOut" }}
             />
-            {/* Center text */}
-            <text
-              x={size / 2}
-              y={size / 2}
-              textAnchor="middle"
-              dominantBaseline="central"
-              fill="var(--color-foreground)"
-              fontSize="20"
-              fontFamily="var(--font-mono)"
-              fontWeight="600"
-              transform={`rotate(90 ${size / 2} ${size / 2})`}
-            >
-              <tspan>{displayText}</tspan>
-              <tspan fontSize="12" fill="var(--color-muted)">
-                {" "}{unit}
-              </tspan>
-            </text>
           </svg>
+          <div className="absolute inset-0 flex items-center justify-center">
+            <span className="font-mono font-semibold leading-none text-foreground" style={{ fontSize: 20 }}>
+              {displayText}
+              <span className="text-muted" style={{ fontSize: 12 }}> {unit}</span>
+            </span>
+          </div>
         </div>
       )}
     </div>

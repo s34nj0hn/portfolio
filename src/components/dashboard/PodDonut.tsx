@@ -50,13 +50,12 @@ export function PodDonut({
             cy={size / 2}
             r={radius}
             fill="none"
-            stroke="var(--color-card-border)"
+            style={{ stroke: "var(--color-card-border)" }}
             strokeWidth={strokeWidth}
           />
           {/* Segments */}
           {segments.map((seg) => {
             const segLength = total > 0 ? (seg.value / total) * circumference : 0;
-            const dashOffset = circumference - segLength;
             const rotation = (cumulativeOffset / circumference) * 360;
             cumulativeOffset += segLength;
             return (
@@ -66,12 +65,11 @@ export function PodDonut({
                 cy={size / 2}
                 r={radius}
                 fill="none"
-                stroke={seg.color}
+                style={{ stroke: seg.color, transition: "stroke-dasharray 0.8s ease" }}
                 strokeWidth={strokeWidth}
                 strokeLinecap="butt"
                 strokeDasharray={`${segLength} ${circumference - segLength}`}
                 transform={`rotate(${rotation} ${size / 2} ${size / 2})`}
-                style={{ transition: "stroke-dasharray 0.8s ease" }}
               />
             );
           })}
@@ -81,9 +79,8 @@ export function PodDonut({
             y={size / 2 - 6}
             textAnchor="middle"
             dominantBaseline="central"
-            fill="var(--color-foreground)"
+            style={{ fill: "var(--color-foreground)", fontFamily: "var(--font-mono)" }}
             fontSize="18"
-            fontFamily="var(--font-mono)"
             fontWeight="600"
             transform={`rotate(90 ${size / 2} ${size / 2})`}
           >
@@ -94,9 +91,8 @@ export function PodDonut({
             y={size / 2 + 12}
             textAnchor="middle"
             dominantBaseline="central"
-            fill="var(--color-muted)"
+            style={{ fill: "var(--color-muted)", fontFamily: "var(--font-mono)" }}
             fontSize="10"
-            fontFamily="var(--font-mono)"
             transform={`rotate(90 ${size / 2} ${size / 2})`}
           >
             pods
