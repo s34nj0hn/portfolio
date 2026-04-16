@@ -1,71 +1,117 @@
+"use client";
+
+import { motion } from "framer-motion";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { DashboardGrid } from "@/components/dashboard/DashboardGrid";
 import { TechStack } from "@/components/about/TechStack";
+import { Timeline } from "@/components/about/Timeline";
 import { SecurityArch } from "@/components/infra/SecurityArch";
+import { InfraMap } from "@/components/infra/InfraMap";
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+    },
+  },
+};
+
+const itemVariants: any = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { 
+    opacity: 1, 
+    y: 0, 
+    transition: { 
+      duration: 0.5, 
+      ease: [0.22, 1, 0.36, 1] 
+    } 
+  },
+};
 
 export default function Home() {
   return (
     <>
       <Header />
-      <main className="flex flex-col gap-24 pb-24 pt-28">
-        {/* Hero */}
-        <section
+      <main className="flex flex-col gap-24 pb-24 pt-28 overflow-hidden">
+        {/* About Section */}
+        <motion.section
           id="about"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          variants={containerVariants}
           className="mx-auto flex w-full max-w-5xl flex-col gap-4 px-6"
         >
-          <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
+          <motion.h1 variants={itemVariants} className="text-4xl font-bold tracking-tight sm:text-6xl text-foreground">
             Sean Johnson
-          </h1>
-          <p className="max-w-2xl text-lg text-muted">
-            Cloud Security Engineer building enterprise-grade infrastructure
-            with Zero Trust architecture. CISSP &amp; AWS Security Specialty
-            certified.
-          </p>
-          <p className="max-w-2xl text-sm text-muted">
-            This site is a live window into a production K3s cluster — every
-            metric below is pulled in real time through a Cloudflare Worker,
-            with zero inbound ports exposed.
-          </p>
-          <div className="mt-2 flex gap-3">
+          </motion.h1>
+          <motion.p variants={itemVariants} className="max-w-2xl text-lg text-muted">
+            Platform Engineer & Cloud Security Specialist building zero-trust infrastructure at enterprise scale. 
+            Currently securing multi-cloud delivery paths at F5.
+          </motion.p>
+          <motion.p variants={itemVariants} className="max-w-2xl text-sm leading-relaxed text-muted/80">
+            This portfolio is a live window into my production K3s cluster. 
+            Metrics are pulled in real-time through a Cloudflare Worker, demonstrating the observability 
+            and security of my self-managed GitOps platform.
+          </motion.p>
+          <motion.div variants={itemVariants} className="mt-4 flex flex-wrap gap-3">
             <a
               href="#dashboard"
-              className="inline-flex items-center rounded-md border border-accent/30 bg-accent/10 px-4 py-2 text-sm font-medium text-accent transition-colors hover:bg-accent/20"
+              className="inline-flex items-center rounded-lg border border-accent/30 bg-accent/10 px-6 py-3 text-sm font-semibold text-accent transition-all hover:bg-accent/20 hover:scale-105 active:scale-95"
             >
-              View Cluster Metrics
-            </a>
-            <a
-              href="https://linkedin.com/in/s34nj0hnson/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center rounded-md border border-card-border px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-card"
-            >
-              LinkedIn
+              Live Signal
             </a>
             <a
               href="https://github.com/s34nj0hn/lab"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center rounded-md border border-card-border px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-card"
+              className="inline-flex items-center rounded-lg border border-white/10 bg-white/5 px-6 py-3 text-sm font-semibold text-foreground transition-all hover:bg-white/10 hover:scale-105 active:scale-95"
             >
-              GitHub
+              GitOps Source
             </a>
-          </div >
-        </section>
+          </motion.div>
+        </motion.section>
 
         {/* Dashboard */}
-        <DashboardGrid />
+        <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}>
+          <DashboardGrid />
+        </motion.div>
 
-        {/* Tech Stack */}
-        <section className="mx-auto w-full max-w-5xl px-6">
-          <h2 className="mb-6 text-lg font-semibold">Infrastructure Stack</h2>
-          <TechStack />
-        </section>
+        {/* Infrastructure & Security Section */}
+        <motion.div 
+          initial="hidden" 
+          whileInView="visible" 
+          viewport={{ once: true, margin: "-100px" }}
+          variants={containerVariants}
+          className="mx-auto w-full max-w-5xl px-6 flex flex-col gap-20"
+        >
+          <motion.div variants={itemVariants}>
+            <InfraMap />
+          </motion.div>
+          <motion.div variants={itemVariants}>
+            <SecurityArch />
+          </motion.div>
+        </motion.div>
 
-        {/* Security Architecture */}
-        <section className="mx-auto w-full max-w-5xl px-6">
-          <SecurityArch />
-        </section>
+        {/* Career & Skills Section */}
+        <motion.div 
+          initial="hidden" 
+          whileInView="visible" 
+          viewport={{ once: true, margin: "-100px" }}
+          variants={containerVariants}
+          className="mx-auto w-full max-w-5xl px-6 grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24"
+        >
+          <motion.div variants={itemVariants} className="lg:col-span-8">
+            <Timeline />
+          </motion.div>
+          <motion.div variants={itemVariants} className="lg:col-span-4">
+            <h3 className="text-xl font-bold mb-8">Technical Stack</h3>
+            <TechStack />
+          </motion.div>
+        </motion.div>
       </main>
       <Footer />
     </>

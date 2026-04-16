@@ -22,6 +22,21 @@ body {
   min-height: 100vh;
 }
 
+/* Glassmorphism base for all cards */
+.card,
+.rounded-lg.border.border-card-border.bg-card {
+  background: var(--color-card);
+  border: 1px solid var(--color-card-border);
+  backdrop-filter: blur(12px);
+}
+
+/* Enhanced glass effect on hover */
+.card:hover,
+.rounded-lg.border.border-card-border.bg-card:hover {
+  background: rgba(255, 255, 255, 0.05);
+  box-shadow: 0 0 20px var(--color-accent-glow);
+}
+
 @keyframes pulse-glow {
   0%, 100% { box-shadow: 0 0 4px var(--color-accent-glow); }
   50% { box-shadow: 0 0 12px var(--color-accent-glow); }
