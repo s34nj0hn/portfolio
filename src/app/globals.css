@@ -41,3 +41,30 @@ body {
   0%, 100% { box-shadow: 0 0 4px var(--color-accent-glow); }
   50% { box-shadow: 0 0 12px var(--color-accent-glow); }
 }
+
+@keyframes dash-flow {
+  to { stroke-dashoffset: -16; }
+}
+
+.dash-flow {
+  stroke-dasharray: 6 5;
+  animation: dash-flow 1.4s linear infinite;
+}
+
+@keyframes scan-line {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100vh); }
+}
+
+.card-glass {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.card-glass:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(0, 212, 255, 0.2);
+  box-shadow: 0 0 24px rgba(0, 212, 255, 0.08), inset 0 1px 0 rgba(255,255,255,0.06);
+}

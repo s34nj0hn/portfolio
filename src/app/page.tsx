@@ -35,7 +35,13 @@ export default function Home() {
   return (
     <>
       <Header />
-      <main className="flex flex-col gap-24 pb-24 pt-28 overflow-hidden">
+      <main className="relative flex flex-col gap-24 pb-24 pt-28 overflow-hidden">
+        {/* Hero ambient glow */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute top-0 left-0 w-full h-[55vh] -z-10"
+          style={{ background: "radial-gradient(ellipse 75% 55% at 12% 0%, rgba(0,212,255,0.07) 0%, transparent 65%)" }}
+        />
         {/* About Section */}
         <motion.section
           id="about"

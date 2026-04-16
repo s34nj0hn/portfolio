@@ -1,5 +1,6 @@
 "use client";
 
+import { motion } from "framer-motion";
 import { useClusterMetrics } from "@/hooks/useClusterMetrics";
 import { ClusterStatus } from "./ClusterStatus";
 import { MetricCard } from "./MetricCard";
@@ -7,6 +8,16 @@ import { RadialGauge } from "./RadialGauge";
 import { PodDonut } from "./PodDonut";
 import { UptimeCounter } from "./UptimeCounter";
 import { StorageWidget } from "./StorageWidget";
+
+const gridVariants = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.07 } },
+};
+
+const cardVariants = {
+  hidden: { opacity: 0, y: 16, scale: 0.97 },
+  visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.4, ease: [0.22, 1, 0.36, 1] } },
+};
 
 function formatUptime(seconds: number): string {
   const d = Math.floor(seconds / 86400);
@@ -58,38 +69,32 @@ export function DashboardGrid() {
           </p>
         </div>
       ) : (
-        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
-          <MetricCard
-            label="Nodes"
-            value={data?.node_count ?? "—"}
-            isLoading={isLoading}
-          />
-          <PodDonut
-            running={data?.running_pods ?? 0}
-            succeeded={data?.succeeded_pods ?? 0}
-            total={data?.total_pods ?? 0}
-            isLoading={isLoading}
-          />
-          <RadialGauge
-            label="CPU"
-            value={data?.cpu_usage_pct ?? 0}
-            isLoading={isLoading}
-          />
-          <RadialGauge
-            label="Memory"
-            value={data?.memory_usage_pct ?? 0}
-            isLoading={isLoading}
-          />
-          <UptimeCounter
-            baseSeconds={data?.cluster_uptime_seconds ?? 0}
-            lastUpdated={lastUpdated}
-            isLoading={isLoading}
-          />
-          <StorageWidget
-            pvcBound={data?.pvc_bound ?? 0}
-            isLoading={isLoading}
-          />
-        </div>
+        <motion.div
+          className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4"
+          variants={gridVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-60px" }}
+        >
+          <motion.div variants={cardVariants}>
+            <MetricCard label="Nodes" value={data?.node_count ?? "—"} isLoading={isLoading} />
+          </motion.div>
+          <motion.div variants={cardVariants}>
+            <PodDonut running={data?.running_pods ?? 0} succeeded={data?.succeeded_pods ?? 0} total={data?.total_pods ?? 0} isLoading={isLoading} />
+          </motion.div>
+          <motion.div variants={cardVariants}>
+            <RadialGauge label="CPU" value={data?.cpu_usage_pct ?? 0} isLoading={isLoading} />
+          </motion.div>
+          <motion.div variants={cardVariants}>
+            <RadialGauge label="Memory" value={data?.memory_usage_pct ?? 0} isLoading={isLoading} />
+          </motion.div>
+          <motion.div variants={cardVariants}>
+            <UptimeCounter baseSeconds={data?.cluster_uptime_seconds ?? 0} lastUpdated={lastUpdated} isLoading={isLoading} />
+          </motion.div>
+          <motion.div variants={cardVariants}>
+            <StorageWidget pvcBound={data?.pvc_bound ?? 0} isLoading={isLoading} />
+          </motion.div>
+        </motion.div>
       )}
     </section>
   );

@@ -11,39 +11,65 @@ interface InfraNode {
   y: number;
   type: "entry" | "gateway" | "security" | "compute" | "storage";
   tags: string[];
+  abbrev: string;
   isSecurityFocus: boolean;
 }
 
 const NODES: InfraNode[] = [
-  { id: "internet", name: "Internet", description: "Public inbound traffic", x: 50, y: 50, type: "entry", tags: ["Public"], isSecurityFocus: true },
-  { id: "cloudflare", name: "Cloudflare", description: "WAF, DDoS & Tunnel", x: 150, y: 50, type: "gateway", tags: ["SASE", "Edge"], isSecurityFocus: true },
-  { id: "traefik", name: "Traefik", description: "Ingress Controller", x: 300, y: 50, type: "gateway", tags: ["L7 Load Balancer"], isSecurityFocus: true },
-  { id: "authentik", name: "Authentik", description: "Identity Provider (IdP)", x: 300, y: 150, type: "security", tags: ["OIDC", "SAML", "SSO"], isSecurityFocus: true },
-  { id: "k3s", name: "K3s Cluster", description: "Production Workloads", x: 500, y: 100, type: "compute", tags: ["K8s", "Alpine"], isSecurityFocus: true },
-  { id: "netpol", name: "NetworkPolicies", description: "Zero-Trust Segments", x: 400, y: 50, type: "security", tags: ["L4 Firewall"], isSecurityFocus: true },
-  { id: "longhorn", name: "Longhorn", description: "Distributed Block Storage", x: 500, y: 200, type: "storage", tags: ["CSI", "NFS"], isSecurityFocus: false },
-  { id: "sops", name: "SOPS/Age", description: "Secrets-as-Code", x: 400, y: 150, type: "security", tags: ["Encryption"], isSecurityFocus: true },
-  { id: "metallb", name: "MetalLB", description: "L2 Load Balancer", x: 650, y: 50, type: "gateway", tags: ["BGP", "ARP"], isSecurityFocus: false },
+  { id: "internet",    name: "Internet",       description: "Public inbound traffic",       x: 65,  y: 105, type: "entry",    tags: ["Public"],          abbrev: "NET", isSecurityFocus: true },
+  { id: "cloudflare",  name: "Cloudflare",      description: "WAF, DDoS & Tunnel",           x: 200, y: 105, type: "gateway",  tags: ["SASE", "Edge"],    abbrev: "CF",  isSecurityFocus: true },
+  { id: "traefik",     name: "Traefik",         description: "Ingress Controller",           x: 345, y: 105, type: "gateway",  tags: ["L7 LB"],           abbrev: "TR",  isSecurityFocus: true },
+  { id: "netpol",      name: "NetPolicies",     description: "Zero-Trust Segments",         x: 490, y: 105, type: "security", tags: ["L4 Firewall"],     abbrev: "NP",  isSecurityFocus: true },
+  { id: "k3s",         name: "K3s",             description: "Production Workloads",        x: 635, y: 105, type: "compute",  tags: ["K8s", "Alpine"],   abbrev: "K3s", isSecurityFocus: true },
+  { id: "authentik",   name: "Authentik",       description: "Identity Provider (IdP)",     x: 345, y: 225, type: "security", tags: ["OIDC", "SSO"],     abbrev: "IdP", isSecurityFocus: true },
+  { id: "sops",        name: "SOPS/Age",        description: "Secrets-as-Code",             x: 490, y: 225, type: "security", tags: ["Encryption"],      abbrev: "ENC", isSecurityFocus: true },
+  { id: "longhorn",    name: "Longhorn",        description: "Distributed Block Storage",  x: 635, y: 225, type: "storage",  tags: ["CSI", "NFS"],      abbrev: "PVC", isSecurityFocus: false },
+  { id: "metallb",     name: "MetalLB",         description: "L2 Load Balancer",            x: 712, y: 105, type: "gateway",  tags: ["BGP", "ARP"],      abbrev: "LB",  isSecurityFocus: false },
 ];
 
 const CONNECTIONS = [
-  { from: "internet", to: "cloudflare" },
-  { from: "cloudflare", to: "traefik" },
-  { from: "traefik", to: "netpol" },
-  { from: "netpol", to: "k3s" },
-  { from: "traefik", to: "authentik" },
-  { from: "k3s", to: "longhorn" },
-  { from: "authentik", to: "k3s" },
-  { from: "sops", to: "k3s" },
-  { from: "k3s", to: "metallb" },
+  { from: "internet",   to: "cloudflare" },
+  { from: "cloudflare", to: "traefik"    },
+  { from: "traefik",    to: "netpol"     },
+  { from: "netpol",     to: "k3s"        },
+  { from: "traefik",    to: "authentik"  },
+  { from: "authentik",  to: "k3s"        },
+  { from: "sops",       to: "k3s"        },
+  { from: "k3s",        to: "longhorn"   },
+  { from: "k3s",        to: "metallb"    },
 ];
+
+const NODE_COLORS: Record<InfraNode["type"], { fill: string; stroke: string; text: string }> = {
+  security: { fill: "rgba(0,212,255,0.12)", stroke: "rgba(0,212,255,0.7)",    text: "#00d4ff" },
+  gateway:  { fill: "rgba(255,255,255,0.06)", stroke: "rgba(255,255,255,0.3)", text: "#e4e4e7" },
+  compute:  { fill: "rgba(139,92,246,0.15)", stroke: "rgba(139,92,246,0.6)",  text: "#c4b5fd" },
+  storage:  { fill: "rgba(251,146,60,0.10)", stroke: "rgba(251,146,60,0.5)",  text: "#fdba74" },
+  entry:    { fill: "rgba(255,255,255,0.03)", stroke: "rgba(255,255,255,0.15)", text: "#71717a" },
+};
+
+const NODE_R = 20;
+
+function trimLine(ax: number, ay: number, bx: number, by: number) {
+  const dx = bx - ax;
+  const dy = by - ay;
+  const len = Math.sqrt(dx * dx + dy * dy);
+  if (len === 0) return { x1: ax, y1: ay, x2: bx, y2: by };
+  const ux = dx / len;
+  const uy = dy / len;
+  return {
+    x1: ax + ux * (NODE_R + 2),
+    y1: ay + uy * (NODE_R + 2),
+    x2: bx - ux * (NODE_R + 8),
+    y2: by - uy * (NODE_R + 8),
+  };
+}
 
 export function InfraMap() {
   const [isSecurityOnly, setIsSecurityOnly] = useState(true);
   const [hoveredNode, setHoveredNode] = useState<InfraNode | null>(null);
 
   const filteredNodes = isSecurityOnly ? NODES.filter(n => n.isSecurityFocus) : NODES;
-  const filteredConnections = CONNECTIONS.filter(c => 
+  const filteredConnections = CONNECTIONS.filter(c =>
     filteredNodes.some(n => n.id === c.from) && filteredNodes.some(n => n.id === c.to)
   );
 
@@ -56,51 +82,71 @@ export function InfraMap() {
             Interactive view of the cluster architecture from edge to core.
           </p>
         </div>
-        
         <div className="flex bg-white/5 p-1 rounded-lg border border-white/10">
-          <button 
+          <button
             onClick={() => setIsSecurityOnly(true)}
-            className={`px-4 py-1.5 text-xs font-medium rounded-md transition-all ${isSecurityOnly ? 'bg-accent text-background' : 'text-muted hover:text-foreground'}`}
+            className={`px-4 py-1.5 text-xs font-medium rounded-md transition-all ${isSecurityOnly ? "bg-accent text-background" : "text-muted hover:text-foreground"}`}
           >
             Security Focused
           </button>
-          <button 
+          <button
             onClick={() => setIsSecurityOnly(false)}
-            className={`px-4 py-1.5 text-xs font-medium rounded-md transition-all ${!isSecurityOnly ? 'bg-accent text-background' : 'text-muted hover:text-foreground'}`}
+            className={`px-4 py-1.5 text-xs font-medium rounded-md transition-all ${!isSecurityOnly ? "bg-accent text-background" : "text-muted hover:text-foreground"}`}
           >
             Full Infra
           </button>
         </div>
       </div>
 
-      <div className="relative aspect-[16/9] w-full bg-black/20 rounded-2xl border border-white/10 overflow-hidden group">
-        <svg viewBox="0 0 800 300" className="w-full h-full">
+      <div className="relative w-full bg-black/30 rounded-2xl border border-white/10 overflow-hidden">
+        <svg viewBox="0 0 800 320" className="w-full h-auto" style={{ minHeight: 200 }}>
           <defs>
-            <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orientation="auto">
-              <polygon points="0 0, 10 3.5, 0 7" fill="var(--color-accent)" opacity="0.5" />
+            <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+              <polygon points="0 0, 8 3, 0 6" fill="rgba(0,212,255,0.5)" />
             </marker>
+            <filter id="node-glow" x="-30%" y="-30%" width="160%" height="160%">
+              <feGaussianBlur stdDeviation="4" result="blur" />
+              <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
+            </filter>
+            <filter id="subtle-glow" x="-20%" y="-20%" width="140%" height="140%">
+              <feGaussianBlur stdDeviation="2" result="blur" />
+              <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
+            </filter>
+            <pattern id="dot-grid" width="28" height="28" patternUnits="userSpaceOnUse">
+              <circle cx="1" cy="1" r="0.8" fill="rgba(255,255,255,0.04)" />
+            </pattern>
           </defs>
-          
-          {/* Connection Lines */}
+
+          {/* Background dot grid */}
+          <rect width="800" height="320" fill="url(#dot-grid)" />
+
+          {/* Row labels */}
+          <text x="8" y="110" fill="rgba(255,255,255,0.12)" fontSize="8" fontFamily="monospace">EDGE →</text>
+          <text x="8" y="230" fill="rgba(255,255,255,0.12)" fontSize="8" fontFamily="monospace">AUTH →</text>
+
+          {/* Horizontal guide lines */}
+          <line x1="0" y1="105" x2="800" y2="105" stroke="rgba(255,255,255,0.03)" strokeWidth="1" />
+          <line x1="0" y1="225" x2="800" y2="225" stroke="rgba(255,255,255,0.03)" strokeWidth="1" />
+
+          {/* Connection lines */}
           <AnimatePresence>
-            {filteredConnections.map((conn, idx) => {
-              const fromNode = NODES.find(n => n.id === conn.from)!;
-              const toNode = NODES.find(n => n.id === conn.to)!;
+            {filteredConnections.map(conn => {
+              const from = NODES.find(n => n.id === conn.from)!;
+              const to   = NODES.find(n => n.id === conn.to)!;
+              const { x1, y1, x2, y2 } = trimLine(from.x, from.y, to.x, to.y);
+              const isSecurity = from.type === "security" || to.type === "security";
               return (
                 <motion.line
                   key={`${conn.from}-${conn.to}`}
-                  initial={{ pathLength: 0, opacity: 0 }}
-                  animate={{ pathLength: 1, opacity: 0.3 }}
+                  x1={x1} y1={y1} x2={x2} y2={y2}
+                  stroke={isSecurity ? "rgba(0,212,255,0.4)" : "rgba(255,255,255,0.2)"}
+                  strokeWidth="1.5"
+                  markerEnd="url(#arrow)"
+                  className="dash-flow"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
-                  x1={fromNode.x}
-                  y1={fromNode.y}
-                  x2={toNode.x}
-                  y2={toNode.y}
-                  stroke="var(--color-accent)"
-                  strokeWidth="2"
-                  strokeDasharray="4 4"
-                  markerEnd="url(#arrowhead)"
-                  className="transition-all"
+                  transition={{ duration: 0.4 }}
                 />
               );
             })}
@@ -108,54 +154,90 @@ export function InfraMap() {
 
           {/* Nodes */}
           <AnimatePresence>
-            {filteredNodes.map((node) => (
-              <motion.g
-                key={node.id}
-                layout
-                initial={{ scale: 0, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                exit={{ scale: 0, opacity: 0 }}
-                onMouseEnter={() => setHoveredNode(node)}
-                onMouseLeave={() => setHoveredNode(null)}
-                className="cursor-help"
-              >
-                <circle 
-                  cx={node.x} 
-                  cy={node.y} 
-                  r="6" 
-                  fill={node.type === "security" ? "var(--color-accent)" : "white"}
-                  className="drop-shadow-[0_0_8px_var(--color-accent-glow)]"
-                />
-                <text 
-                  x={node.x} 
-                  y={node.y + 20} 
-                  textAnchor="middle" 
-                  className="fill-muted text-[10px] font-mono pointer-events-none select-none"
+            {filteredNodes.map(node => {
+              const c = NODE_COLORS[node.type];
+              const isHovered = hoveredNode?.id === node.id;
+              return (
+                <motion.g
+                  key={node.id}
+                  initial={{ scale: 0, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  exit={{ scale: 0, opacity: 0 }}
+                  transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                  onMouseEnter={() => setHoveredNode(node)}
+                  onMouseLeave={() => setHoveredNode(null)}
+                  style={{ cursor: "help" }}
+                  filter={isHovered ? "url(#node-glow)" : node.type === "security" ? "url(#subtle-glow)" : undefined}
                 >
-                  {node.name}
-                </text>
-              </motion.g>
-            ))}
+                  {/* Outer ring for security nodes */}
+                  {node.type === "security" && (
+                    <circle
+                      cx={node.x} cy={node.y} r={NODE_R + 5}
+                      fill="none"
+                      stroke="rgba(0,212,255,0.15)"
+                      strokeWidth="1"
+                      strokeDasharray="3 3"
+                    />
+                  )}
+                  {/* Main circle */}
+                  <circle
+                    cx={node.x} cy={node.y} r={NODE_R}
+                    fill={c.fill}
+                    stroke={isHovered ? c.stroke : c.stroke.replace(/[\d.]+\)$/, "0.5)")}
+                    strokeWidth={node.type === "security" ? 1.5 : 1}
+                  />
+                  {/* Abbrev text */}
+                  <text
+                    x={node.x} y={node.y + 4}
+                    textAnchor="middle"
+                    fill={c.text}
+                    fontSize="9"
+                    fontFamily="monospace"
+                    fontWeight="700"
+                    pointerEvents="none"
+                  >
+                    {node.abbrev}
+                  </text>
+                  {/* Name label below */}
+                  <text
+                    x={node.x} y={node.y + NODE_R + 14}
+                    textAnchor="middle"
+                    fill={node.type === "security" ? "rgba(228,228,231,0.8)" : "rgba(113,113,122,0.9)"}
+                    fontSize="9"
+                    fontFamily="monospace"
+                    pointerEvents="none"
+                  >
+                    {node.name}
+                  </text>
+                </motion.g>
+              );
+            })}
           </AnimatePresence>
         </svg>
 
-        {/* Tooltip */}
+        {/* Hover tooltip */}
         <AnimatePresence>
           {hoveredNode && (
             <motion.div
-              initial={{ opacity: 0, y: 10 }}
+              initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 10 }}
-              className="absolute bottom-6 left-6 p-4 rounded-xl bg-background/80 border border-white/10 backdrop-blur-md shadow-2xl max-w-xs pointer-events-none"
+              exit={{ opacity: 0, y: 8 }}
+              transition={{ duration: 0.15 }}
+              className="absolute bottom-4 left-4 p-3 rounded-xl bg-background/90 border border-white/10 backdrop-blur-md shadow-2xl pointer-events-none max-w-xs"
             >
-              <div className="flex items-center gap-2 mb-2">
-                <span className={`w-2 h-2 rounded-full ${hoveredNode.type === 'security' ? 'bg-accent' : 'bg-white'}`} />
-                <h4 className="font-bold text-accent">{hoveredNode.name}</h4>
+              <div className="flex items-center gap-2 mb-1">
+                <span
+                  className="w-2 h-2 rounded-full flex-shrink-0"
+                  style={{ backgroundColor: NODE_COLORS[hoveredNode.type].stroke }}
+                />
+                <span className="font-bold text-sm" style={{ color: NODE_COLORS[hoveredNode.type].text }}>
+                  {hoveredNode.name}
+                </span>
               </div>
-              <p className="text-xs text-muted mb-3">{hoveredNode.description}</p>
+              <p className="text-xs text-muted mb-2">{hoveredNode.description}</p>
               <div className="flex flex-wrap gap-1">
                 {hoveredNode.tags.map(tag => (
-                  <span key={tag} className="px-1.5 py-0.5 rounded bg-white/5 border border-white/10 text-[9px] font-mono">
+                  <span key={tag} className="px-1.5 py-0.5 rounded bg-white/5 border border-white/10 text-[9px] font-mono text-muted">
                     {tag}
                   </span>
                 ))}
