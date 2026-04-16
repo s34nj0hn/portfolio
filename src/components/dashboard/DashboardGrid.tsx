@@ -3,6 +3,10 @@
 import { useClusterMetrics } from "@/hooks/useClusterMetrics";
 import { ClusterStatus } from "./ClusterStatus";
 import { MetricCard } from "./MetricCard";
+import { RadialGauge } from "./RadialGauge";
+import { PodDonut } from "./PodDonut";
+import { UptimeCounter } from "./UptimeCounter";
+import { StorageWidget } from "./StorageWidget";
 
 function formatUptime(seconds: number): string {
   const d = Math.floor(seconds / 86400);
@@ -54,39 +58,34 @@ export function DashboardGrid() {
           </p>
         </div>
       ) : (
-        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+        <div className=\"grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4\">
           <MetricCard
-            label="Nodes"
-            value={data?.node_count ?? "—"}
+            label=\"Nodes\"
+            value={data?.node_count ?? \"—\"}
             isLoading={isLoading}
           />
-          <MetricCard
-            label="Running Pods"
-            value={data ? `${data.running_pods}/${data.total_pods}` : "—"}
+          <PodDonut
+            running={data?.running_pods ?? 0}
+            succeeded={data?.succeeded_pods ?? 0}
+            total={data?.total_pods ?? 0}
             isLoading={isLoading}
           />
-          <MetricCard
-            label="CPU"
-            value={data?.cpu_usage_pct ?? "—"}
-            unit="%"
+          <RadialGauge
+            label=\"CPU\"
+            value={data?.cpu_usage_pct ?? 0}
             isLoading={isLoading}
           />
-          <MetricCard
-            label="Memory"
-            value={data?.memory_usage_pct ?? "—"}
-            unit="%"
+          <RadialGauge
+            label=\"Memory\"
+            value={data?.memory_usage_pct ?? 0}
             isLoading={isLoading}
           />
-          <MetricCard
-            label="PVCs Bound"
-            value={data?.pvc_bound ?? "—"}
+          <UptimeCounter
+            seconds={data?.cluster_uptime_seconds ?? 0}
             isLoading={isLoading}
           />
-          <MetricCard
-            label="Uptime"
-            value={
-              data ? formatUptime(data.cluster_uptime_seconds) : "—"
-            }
+          <StorageWidget
+            count={data?.pvc_bound ?? 0}
             isLoading={isLoading}
           />
         </div>

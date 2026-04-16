@@ -1,6 +1,8 @@
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { DashboardGrid } from "@/components/dashboard/DashboardGrid";
+import { TechStack } from "@/components/about/TechStack";
+import { SecurityArch } from "@/components/infra/SecurityArch";
 
 export default function Home() {
   return (
@@ -48,38 +50,21 @@ export default function Home() {
             >
               GitHub
             </a>
-          </div>
+          </div >
         </section>
 
         {/* Dashboard */}
         <DashboardGrid />
 
-        {/* Tech Stack (Phase 2 placeholder) */}
+        {/* Tech Stack */}
         <section className="mx-auto w-full max-w-5xl px-6">
           <h2 className="mb-6 text-lg font-semibold">Infrastructure Stack</h2>
-          <div className="flex flex-wrap gap-2">
-            {[
-              "K3s",
-              "FluxCD",
-              "Longhorn",
-              "Traefik",
-              "Authentik",
-              "Cloudflare Tunnels",
-              "Prometheus",
-              "Grafana",
-              "SOPS",
-              "Terraform",
-              "Helm",
-              "NetworkPolicies",
-            ].map((tech) => (
-              <span
-                key={tech}
-                className="rounded-md border border-card-border bg-card px-3 py-1 font-mono text-xs text-muted"
-              >
-                {tech}
-              </span>
-            ))}
-          </div>
+          <TechStack />
+        </section>
+
+        {/* Security Architecture */}
+        <section className="mx-auto w-full max-w-5xl px-6">
+          <SecurityArch />
         </section>
       </main>
       <Footer />
