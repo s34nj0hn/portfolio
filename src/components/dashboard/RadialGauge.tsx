@@ -1,7 +1,7 @@
 "use client";
 
-import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
-import { useEffect } from "react";
+import { motion, useMotionValue, useMotionValueEvent, useSpring, useTransform } from "framer-motion";
+import { useEffect, useState } from "react";
 
 interface RadialGaugeProps {
   label: string;
@@ -31,6 +31,8 @@ export function RadialGauge({
     mass: 0.8 
   });
   const displayValue = useTransform(springValue, (latest) => latest.toFixed(1));
+  const [displayText, setDisplayText] = useState(value.toFixed(1));
+  useMotionValueEvent(displayValue, "change", setDisplayText);
 
   const size = 120;
   const strokeWidth = 8;
@@ -113,9 +115,7 @@ export function RadialGauge({
               fontWeight="600"
               transform={`rotate(90 ${size / 2} ${size / 2})`}
             >
-              <motion.tspan>
-                {displayValue}
-              </motion.tspan>
+              <tspan>{displayText}</tspan>
               <tspan fontSize="12" fill="var(--color-muted)">
                 {" "}{unit}
               </tspan>
