@@ -21,7 +21,7 @@ export function Header() {
             LinkedIn
           </a>
           <a
-            href="https://github.com/s34nj0hn/lab"
+            href="https://github.com/s34nj0hn/k8s-platform-reference"
             target="_blank"
             rel="noopener noreferrer"
             className="transition-colors hover:text-foreground"

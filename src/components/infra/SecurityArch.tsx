@@ -5,15 +5,15 @@ import React from "react";
 interface SecurityLayer {
   name: string;
   description: string;
-  icon: "globe" | "server" | "shield" | "user" | "lock";
+  icon: "globe" | "server" | "shield" | "user" | "lock" | "repo";
 }
 
 const LAYERS: SecurityLayer[] = [
-  { name: "Cloudflare Edge",   description: "WAF, DDoS Protection & Access Tunnel",      icon: "globe"   },
-  { name: "Traefik Ingress",   description: "Dynamic Routing & TLS Termination",          icon: "server"  },
-  { name: "NetworkPolicies",   description: "Default-Deny / Zero-Trust Segmentation",     icon: "shield"  },
-  { name: "Authentik",         description: "IdP / SSO & Identity Verification",           icon: "user"    },
-  { name: "SOPS / age",        description: "Encrypted Secrets-as-Code",                  icon: "lock"    },
+  { name: "Public Git Source", description: "Reference platform state is reviewed and rebuilt from GitHub", icon: "repo" },
+  { name: "Flux Reconciliation", description: "Cluster controllers apply only the declared GitOps state", icon: "server" },
+  { name: "OPA Gatekeeper", description: "Admission policies enforce labels and privileged-container guardrails", icon: "shield" },
+  { name: "Private Metrics Backend", description: "Prometheus and Grafana stay internal behind a Cloudflare Tunnel", icon: "lock" },
+  { name: "Sanitized Worker API", description: "The browser receives aggregate JSON, never raw PromQL or inventory", icon: "globe" },
 ];
 
 function LayerIcon({ name }: { name: SecurityLayer["icon"] }) {
@@ -56,6 +56,15 @@ function LayerIcon({ name }: { name: SecurityLayer["icon"] }) {
           <path d="M7 11V7a5 5 0 0 1 10 0v4" />
         </svg>
       );
+    case "repo":
+      return (
+        <svg className={cls} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M6 3h9l3 3v15H6z" />
+          <path d="M15 3v4h4" />
+          <path d="M9 12h6" />
+          <path d="M9 16h6" />
+        </svg>
+      );
   }
 }
 
@@ -65,8 +74,8 @@ export function SecurityArch() {
       <div className="text-center mb-10">
         <h3 className="text-2xl font-bold mb-2">Security Architecture</h3>
         <p className="text-muted text-sm max-w-2xl mx-auto">
-          A layered defense-in-depth strategy ensuring only authenticated,
-          authorized traffic reaches the core workloads.
+          A narrow public telemetry path: GitOps controls the platform, policy guards the cluster,
+          and the browser only sees sanitized aggregate health.
         </p>
       </div>
 

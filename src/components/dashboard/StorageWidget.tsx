@@ -18,7 +18,7 @@ export function StorageWidget({ pvcBound, isLoading }: StorageWidgetProps) {
             <span className="ml-1 text-sm font-normal text-muted">PVCs</span>
           </p>
           <p className="mt-1 text-[11px] text-muted">
-            Longhorn distributed storage
+            Reference cluster claims
           </p>
         </>
       )}

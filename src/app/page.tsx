@@ -55,13 +55,13 @@ export default function Home() {
             Sean Johnson
           </motion.h1>
           <motion.p variants={itemVariants} className="max-w-2xl text-lg text-muted">
-            Platform Engineer & Cloud Security Specialist building zero-trust infrastructure at enterprise scale. 
+            Platform Engineer & Cloud Security Specialist building reproducible zero-trust infrastructure at enterprise scale. 
             Currently securing multi-cloud delivery paths at F5.
           </motion.p>
           <motion.p variants={itemVariants} className="max-w-2xl text-sm leading-relaxed text-muted/80">
-            This portfolio is a live window into my production K3s cluster. 
+            This portfolio is a live window into my Kubernetes reference cluster. 
             Metrics are pulled in real-time through a Cloudflare Worker, demonstrating the observability 
-            and security of my self-managed GitOps platform.
+            and security boundaries of a rebuildable GitOps platform.
           </motion.p>
           <motion.div variants={itemVariants} className="mt-4 flex flex-wrap gap-3">
             <a
@@ -71,7 +71,7 @@ export default function Home() {
               Live Signal
             </a>
             <a
-              href="https://github.com/s34nj0hn/lab"
+              href="https://github.com/s34nj0hn/k8s-platform-reference"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center rounded-lg border border-white/10 bg-white/5 px-6 py-3 text-sm font-semibold text-foreground transition-all hover:bg-white/10 hover:scale-105 active:scale-95"

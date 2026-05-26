@@ -19,15 +19,6 @@ const cardVariants = {
   visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.4, ease: [0.22, 1, 0.36, 1] as const } },
 };
 
-function formatUptime(seconds: number): string {
-  const d = Math.floor(seconds / 86400);
-  const h = Math.floor((seconds % 86400) / 3600);
-  const m = Math.floor((seconds % 3600) / 60);
-  if (d > 0) return `${d}d ${h}h ${m}m`;
-  if (h > 0) return `${h}h ${m}m`;
-  return `${m}m`;
-}
-
 function formatTimeAgo(timestamp: number): string {
   const seconds = Math.floor((Date.now() - timestamp) / 1000);
   if (seconds < 10) return "just now";
@@ -93,6 +84,15 @@ export function DashboardGrid() {
           </motion.div>
           <motion.div variants={cardVariants} className="h-full">
             <StorageWidget pvcBound={data?.pvc_bound ?? 0} isLoading={isLoading} />
+          </motion.div>
+          <motion.div variants={cardVariants} className="h-full">
+            <MetricCard label="Flux" value={data?.flux_ready ? "Ready" : "—"} isLoading={isLoading} />
+          </motion.div>
+          <motion.div variants={cardVariants} className="h-full">
+            <MetricCard label="Policies" value={data?.gatekeeper_constraints ?? "—"} isLoading={isLoading} />
+          </motion.div>
+          <motion.div variants={cardVariants} className="h-full">
+            <MetricCard label="Violations" value={data?.gatekeeper_violations ?? "—"} isLoading={isLoading} />
           </motion.div>
         </motion.div>
       )}

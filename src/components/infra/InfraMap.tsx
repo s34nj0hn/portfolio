@@ -9,34 +9,34 @@ interface InfraNode {
   description: string;
   x: number;
   y: number;
-  type: "entry" | "gateway" | "security" | "compute" | "storage";
+  type: "entry" | "gateway" | "security" | "compute" | "storage" | "observability" | "gitops";
   tags: string[];
   abbrev: string;
   isSecurityFocus: boolean;
 }
 
 const NODES: InfraNode[] = [
-  { id: "internet",    name: "Internet",       description: "Public inbound traffic",       x: 65,  y: 105, type: "entry",    tags: ["Public"],          abbrev: "NET", isSecurityFocus: true },
-  { id: "cloudflare",  name: "Cloudflare",      description: "WAF, DDoS & Tunnel",           x: 200, y: 105, type: "gateway",  tags: ["SASE", "Edge"],    abbrev: "CF",  isSecurityFocus: true },
-  { id: "traefik",     name: "Traefik",         description: "Ingress Controller",           x: 345, y: 105, type: "gateway",  tags: ["L7 LB"],           abbrev: "TR",  isSecurityFocus: true },
-  { id: "netpol",      name: "NetPolicies",     description: "Zero-Trust Segments",         x: 490, y: 105, type: "security", tags: ["L4 Firewall"],     abbrev: "NP",  isSecurityFocus: true },
-  { id: "k3s",         name: "K3s",             description: "Production Workloads",        x: 635, y: 105, type: "compute",  tags: ["K8s", "Alpine"],   abbrev: "K3s", isSecurityFocus: true },
-  { id: "authentik",   name: "Authentik",       description: "Identity Provider (IdP)",     x: 345, y: 225, type: "security", tags: ["OIDC", "SSO"],     abbrev: "IdP", isSecurityFocus: true },
-  { id: "sops",        name: "SOPS/Age",        description: "Secrets-as-Code",             x: 490, y: 225, type: "security", tags: ["Encryption"],      abbrev: "ENC", isSecurityFocus: true },
-  { id: "longhorn",    name: "Longhorn",        description: "Distributed Block Storage",  x: 635, y: 225, type: "storage",  tags: ["CSI", "NFS"],      abbrev: "PVC", isSecurityFocus: false },
-  { id: "metallb",     name: "MetalLB",         description: "L2 Load Balancer",            x: 712, y: 105, type: "gateway",  tags: ["BGP", "ARP"],      abbrev: "LB",  isSecurityFocus: false },
+  { id: "github",      name: "GitHub Repo",     description: "k8s-platform-reference source", x: 65,  y: 105, type: "gitops",        tags: ["GitOps", "Public"],    abbrev: "GH",  isSecurityFocus: true },
+  { id: "flux",        name: "FluxCD",          description: "Reconciles reference manifests", x: 200, y: 105, type: "gitops",        tags: ["Kustomize", "Helm"],   abbrev: "FX",  isSecurityFocus: true },
+  { id: "k3s",         name: "K3s Reference",   description: "Single-node rebuildable cluster", x: 345, y: 105, type: "compute",       tags: ["K3s", "Kubernetes"],   abbrev: "K3s", isSecurityFocus: true },
+  { id: "gatekeeper",  name: "Gatekeeper",      description: "Admission control policy-as-code", x: 490, y: 105, type: "security",      tags: ["OPA", "Constraints"],  abbrev: "OPA", isSecurityFocus: true },
+  { id: "prometheus",  name: "Prometheus",      description: "Reference-cluster metrics backend", x: 635, y: 105, type: "observability", tags: ["Metrics", "Scrape"],   abbrev: "PR",  isSecurityFocus: true },
+  { id: "grafana",     name: "Grafana",         description: "Protected query API for Worker", x: 635, y: 225, type: "observability", tags: ["Viewer API"],           abbrev: "GF",  isSecurityFocus: true },
+  { id: "tunnel",      name: "CF Tunnel",       description: "Private path to Grafana",      x: 490, y: 225, type: "gateway",      tags: ["cloudflared", "QUIC"], abbrev: "TUN", isSecurityFocus: true },
+  { id: "worker",      name: "Worker API",      description: "Sanitized public telemetry JSON", x: 345, y: 225, type: "gateway",      tags: ["api.s34nj0hn.dev"],    abbrev: "API", isSecurityFocus: true },
+  { id: "portfolio",   name: "Portfolio",       description: "Browser consumes fixed heartbeat endpoint", x: 200, y: 225, type: "entry", tags: ["Dashboard"], abbrev: "UI", isSecurityFocus: false },
 ];
 
 const CONNECTIONS = [
-  { from: "internet",   to: "cloudflare" },
-  { from: "cloudflare", to: "traefik"    },
-  { from: "traefik",    to: "netpol"     },
-  { from: "netpol",     to: "k3s"        },
-  { from: "traefik",    to: "authentik"  },
-  { from: "authentik",  to: "k3s"        },
-  { from: "sops",       to: "k3s"        },
-  { from: "k3s",        to: "longhorn"   },
-  { from: "k3s",        to: "metallb"    },
+  { from: "github",     to: "flux"       },
+  { from: "flux",       to: "k3s"        },
+  { from: "flux",       to: "gatekeeper" },
+  { from: "k3s",        to: "prometheus" },
+  { from: "gatekeeper", to: "prometheus" },
+  { from: "prometheus", to: "grafana"    },
+  { from: "grafana",    to: "tunnel"     },
+  { from: "tunnel",     to: "worker"     },
+  { from: "worker",     to: "portfolio"  },
 ];
 
 const NODE_COLORS: Record<InfraNode["type"], { fill: string; stroke: string; text: string }> = {
@@ -44,6 +44,8 @@ const NODE_COLORS: Record<InfraNode["type"], { fill: string; stroke: string; tex
   gateway:  { fill: "rgba(255,255,255,0.06)", stroke: "rgba(255,255,255,0.3)", text: "#e4e4e7" },
   compute:  { fill: "rgba(139,92,246,0.15)", stroke: "rgba(139,92,246,0.6)",  text: "#c4b5fd" },
   storage:  { fill: "rgba(251,146,60,0.10)", stroke: "rgba(251,146,60,0.5)",  text: "#fdba74" },
+  observability: { fill: "rgba(34,197,94,0.12)", stroke: "rgba(34,197,94,0.55)", text: "#86efac" },
+  gitops:   { fill: "rgba(59,130,246,0.12)", stroke: "rgba(59,130,246,0.55)", text: "#93c5fd" },
   entry:    { fill: "rgba(255,255,255,0.03)", stroke: "rgba(255,255,255,0.15)", text: "#71717a" },
 };
 
@@ -79,7 +81,7 @@ export function InfraMap() {
         <div>
           <h3 className="text-2xl font-bold mb-2">Infrastructure Map</h3>
           <p className="text-muted text-sm max-w-md">
-            Interactive view of the cluster architecture from edge to core.
+            Interactive view of the reference platform from Git commit to public telemetry.
           </p>
         </div>
         <div className="flex bg-white/5 p-1 rounded-lg border border-white/10">
@@ -121,8 +123,8 @@ export function InfraMap() {
           <rect width="800" height="320" fill="url(#dot-grid)" />
 
           {/* Row labels */}
-          <text x="8" y="110" fill="rgba(255,255,255,0.12)" fontSize="8" fontFamily="monospace">EDGE →</text>
-          <text x="8" y="230" fill="rgba(255,255,255,0.12)" fontSize="8" fontFamily="monospace">AUTH →</text>
+          <text x="8" y="110" fill="rgba(255,255,255,0.12)" fontSize="8" fontFamily="monospace">CONTROL →</text>
+          <text x="8" y="230" fill="rgba(255,255,255,0.12)" fontSize="8" fontFamily="monospace">SIGNAL →</text>
 
           {/* Horizontal guide lines */}
           <line x1="0" y1="105" x2="800" y2="105" stroke="rgba(255,255,255,0.03)" strokeWidth="1" />

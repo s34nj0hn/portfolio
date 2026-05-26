@@ -3,7 +3,7 @@ const categories = [
     name: "Identity & Access",
     skills: [
       "SAML", "OAuth/OIDC", "Kerberos", "Active Directory",
-      "Azure AD", "Okta", "Authentik", "RBAC", "Zero Trust",
+      "Azure AD", "Okta", "RBAC", "Zero Trust",
     ],
   },
   {
@@ -17,7 +17,7 @@ const categories = [
     name: "Infrastructure",
     skills: [
       "Kubernetes", "K3s", "Docker", "Terraform", "Helm",
-      "GitOps/FluxCD", "CI/CD", "Cloudflare Tunnels", "NetworkPolicies",
+      "GitOps/FluxCD", "CI/CD", "Cloudflare Tunnels", "OPA Gatekeeper",
     ],
   },
   {
@@ -29,7 +29,7 @@ const categories = [
   },
   {
     name: "Observability",
-    skills: ["Prometheus", "Grafana", "SOPS", "Longhorn"],
+    skills: ["Prometheus", "Grafana", "Cloudflare Workers", "Public Telemetry"],
   },
   {
     name: "Compliance",
