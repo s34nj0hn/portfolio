@@ -3,11 +3,11 @@ const categories = [
     name: "Identity & Access",
     skills: [
       "SAML", "OAuth/OIDC", "Kerberos", "Active Directory",
-      "Azure AD", "Okta", "RBAC", "Zero Trust",
+      "Azure AD", "Okta", "RBAC",
     ],
   },
   {
-    name: "Cloud Security",
+    name: "DevSecOps",
     skills: [
       "AWS", "Azure", "GCP", "WAF",
       "Multi-cloud Architecture", "VPC Design", "Security Groups",

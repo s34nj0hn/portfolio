@@ -13,13 +13,13 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Sean Johnson | Cloud Security Engineer",
+  title: "Sean Johnson | Platform Engineer",
   description:
-    "Cloud Security Engineer with CISSP and AWS Security Specialty. Live observability into a rebuildable Kubernetes reference cluster secured with policy-as-code.",
+    "Platform Engineer with CISSP and AWS Security Specialty. Live observability into a rebuildable Kubernetes reference cluster managed with GitOps and policy-as-code.",
   openGraph: {
-    title: "Sean Johnson | Cloud Security Engineer",
+    title: "Sean Johnson | Platform Engineer",
     description:
-      "Live observability into a rebuildable Kubernetes reference cluster secured with policy-as-code.",
+      "Live observability into a rebuildable Kubernetes reference cluster managed with GitOps and policy-as-code.",
     type: "website",
     url: "https://s34nj0hn.dev",
   },

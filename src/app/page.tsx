@@ -55,8 +55,8 @@ export default function Home() {
             Sean Johnson
           </motion.h1>
           <motion.p variants={itemVariants} className="max-w-2xl text-lg text-muted">
-            Platform Engineer & Cloud Security Specialist building reproducible zero-trust infrastructure at enterprise scale. 
-            Currently securing multi-cloud delivery paths at F5.
+            Platform Engineer focused on DevOps, DevSecOps, and Kubernetes platform engineering. 
+            Currently building secure multi-cloud delivery paths at F5.
           </motion.p>
           <motion.p variants={itemVariants} className="max-w-2xl text-sm leading-relaxed text-muted/80">
             This portfolio is a live window into my Kubernetes reference cluster. 
