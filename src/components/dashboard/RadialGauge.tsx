@@ -34,8 +34,8 @@ export function RadialGauge({
   const [displayText, setDisplayText] = useState(value.toFixed(1));
   useMotionValueEvent(displayValue, "change", setDisplayText);
 
-  const size = 120;
-  const strokeWidth = 8;
+  const size = 96;
+  const strokeWidth = 7;
   const radius = (size - strokeWidth) / 2;
   const circumference = 2 * Math.PI * radius;
 
@@ -55,12 +55,12 @@ export function RadialGauge({
   }, [value, isLoading, motionValue]);
 
   return (
-    <div className="flex h-full flex-col items-center justify-center gap-2 rounded-lg border border-card-border bg-card p-4 transition-shadow hover:shadow-[0_0_20px_var(--color-accent-glow)]">
+    <div className="flex h-full flex-col items-center justify-center gap-2 overflow-hidden rounded-lg border border-card-border bg-card p-3 transition-shadow hover:shadow-[0_0_20px_var(--color-accent-glow)]">
       <p className="text-xs font-medium uppercase tracking-wider text-muted">
         {label}
       </p>
       {isLoading ? (
-        <div className="flex h-[120px] w-[120px] items-center justify-center">
+        <div className="flex h-[96px] w-[96px] items-center justify-center">
           <div className="h-16 w-16 animate-pulse rounded-full bg-card-border" />
         </div>
       ) : (
@@ -71,8 +71,8 @@ export function RadialGauge({
             className="rotate-[-90deg]"
           >
             <defs>
-              <filter id={`glow-${label}`}>
-                <feGaussianBlur stdDeviation="3" result="blur" />
+              <filter id={`glow-${label}`} x="-15%" y="-15%" width="130%" height="130%">
+                <feGaussianBlur stdDeviation="2" result="blur" />
                 <feMerge>
                   <feMergeNode in="blur" />
                   <feMergeNode in="SourceGraphic" />
@@ -103,9 +103,9 @@ export function RadialGauge({
             />
           </svg>
           <div className="absolute inset-0 flex items-center justify-center">
-            <span className="font-mono font-semibold leading-none text-foreground" style={{ fontSize: 20 }}>
+            <span className="font-mono font-semibold leading-none text-foreground" style={{ fontSize: 17 }}>
               {displayText}
-              <span className="text-muted" style={{ fontSize: 12 }}> {unit}</span>
+              <span className="text-muted" style={{ fontSize: 10 }}> {unit}</span>
             </span>
           </div>
         </div>

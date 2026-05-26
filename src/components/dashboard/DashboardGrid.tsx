@@ -7,7 +7,6 @@ import { MetricCard } from "./MetricCard";
 import { RadialGauge } from "./RadialGauge";
 import { PodDonut } from "./PodDonut";
 import { UptimeCounter } from "./UptimeCounter";
-import { StorageWidget } from "./StorageWidget";
 
 const gridVariants = {
   hidden: {},
@@ -81,12 +80,6 @@ export function DashboardGrid() {
           </motion.div>
           <motion.div variants={cardVariants} className="h-full">
             <UptimeCounter baseSeconds={data?.cluster_uptime_seconds ?? 0} lastUpdated={lastUpdated} isLoading={isLoading} />
-          </motion.div>
-          <motion.div variants={cardVariants} className="h-full">
-            <StorageWidget pvcBound={data?.pvc_bound ?? 0} isLoading={isLoading} />
-          </motion.div>
-          <motion.div variants={cardVariants} className="h-full">
-            <MetricCard label="Flux" value={data?.flux_ready ? "Ready" : "—"} isLoading={isLoading} />
           </motion.div>
           <motion.div variants={cardVariants} className="h-full">
             <MetricCard label="Policies" value={data?.gatekeeper_constraints ?? "—"} isLoading={isLoading} />
