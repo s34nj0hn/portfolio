@@ -1,133 +1,33 @@
-"use client";
+/*
+THESIS: The portfolio is one rail network. A career line turns into a platform line, and the platform's own Control and
+Signal lines carry live readings from a real cluster. It refuses the dark dashboard of stat cards.
+OWN-WORLD: Light printed map ground, ink type, four line colors that each mean one thing (career blue, platform purple,
+control green, signal red), Overpass signage lettering with Overpass Mono readouts, enamel plates, no cards or shadows.
+STORY: The visitor reads the name as a station sign, sees security work branch into platform engineering in one strip,
+then watches the live heartbeat arrive at "This page" and opens any station to its manifest.
+FIRST VIEWPORT: Name plate at display size top left with a four-line color band, positioning line and contact plate
+beneath; live service board top right; career strip map spanning the full width below.
+FORM: Platform Transit Map, third on the ordered list, staged as station signage over a strip map. Seed bc9987c9.
+*/
 
-import { motion } from "framer-motion";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
-import { DashboardGrid } from "@/components/dashboard/DashboardGrid";
-import { TechStack } from "@/components/about/TechStack";
-import { Timeline } from "@/components/about/Timeline";
-import { SecurityArch } from "@/components/infra/SecurityArch";
-import { InfraMap } from "@/components/infra/InfraMap";
-
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.1,
-    },
-  },
-};
-
-const itemVariants: any = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { 
-    opacity: 1, 
-    y: 0, 
-    transition: { 
-      duration: 0.5, 
-      ease: [0.22, 1, 0.36, 1] 
-    } 
-  },
-};
+import { Hero } from "@/components/hero/Hero";
+import { NetworkSection } from "@/components/network/NetworkSection";
+import { NotExposed } from "@/components/network/NotExposed";
+import { Timetable } from "@/components/career/Timetable";
+import { StackIndex } from "@/components/career/StackIndex";
 
 export default function Home() {
   return (
     <>
       <Header />
-      <main className="relative flex flex-col gap-24 pb-24 pt-28 overflow-hidden">
-        {/* Hero ambient glow */}
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute top-0 left-0 w-full h-[55vh] -z-10"
-          style={{ background: "radial-gradient(ellipse 75% 55% at 12% 0%, rgba(0,212,255,0.07) 0%, transparent 65%)" }}
-        />
-        {/* About Section */}
-        <motion.section
-          id="about"
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
-          variants={containerVariants}
-          className="mx-auto flex w-full max-w-5xl flex-col gap-4 px-6"
-        >
-          <motion.h1 variants={itemVariants} className="text-4xl font-bold tracking-tight sm:text-6xl text-foreground">
-            Sean Johnson
-          </motion.h1>
-          <motion.p variants={itemVariants} className="max-w-2xl text-lg text-muted">
-            Platform Engineer focused on DevOps, DevSecOps, and Kubernetes platform engineering. 
-            Currently building secure multi-cloud delivery paths at F5.
-          </motion.p>
-          <motion.p variants={itemVariants} className="max-w-2xl text-sm leading-relaxed text-muted/80">
-            This portfolio is a live window into my Kubernetes reference cluster. 
-            Metrics are pulled in real-time through a Cloudflare Worker, demonstrating the observability 
-            and security boundaries of a rebuildable GitOps platform.
-          </motion.p>
-          <motion.div variants={itemVariants} className="mt-4 flex flex-wrap gap-3">
-            <a
-              href="#dashboard"
-              className="inline-flex items-center rounded-lg border border-accent/30 bg-accent/10 px-6 py-3 text-sm font-semibold text-accent transition-all hover:bg-accent/20 hover:scale-105 active:scale-95"
-            >
-              Live Signal
-            </a>
-            <a
-              href="https://github.com/s34nj0hn/k8s-platform-reference"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center rounded-lg border border-white/10 bg-white/5 px-6 py-3 text-sm font-semibold text-foreground transition-all hover:bg-white/10 hover:scale-105 active:scale-95"
-            >
-              GitOps Source
-            </a>
-          </motion.div>
-        </motion.section>
-
-        {/* Dashboard */}
-        <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}>
-          <DashboardGrid />
-        </motion.div>
-
-        {/* Infrastructure & Security Section */}
-        <motion.div 
-          initial="hidden" 
-          whileInView="visible" 
-          viewport={{ once: true, margin: "-100px" }}
-          variants={containerVariants}
-          className="mx-auto w-full max-w-5xl px-6 flex flex-col gap-20"
-        >
-          <motion.div variants={itemVariants}>
-            <InfraMap />
-          </motion.div>
-          <motion.div variants={itemVariants}>
-            <SecurityArch />
-          </motion.div>
-        </motion.div>
-
-        {/* Career Section */}
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
-          variants={containerVariants}
-          className="mx-auto w-full max-w-5xl px-6"
-        >
-          <motion.div variants={itemVariants}>
-            <Timeline />
-          </motion.div>
-        </motion.div>
-
-        {/* Skills Section */}
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
-          variants={containerVariants}
-          className="mx-auto w-full max-w-5xl px-6"
-        >
-          <motion.div variants={itemVariants}>
-            <h2 className="text-2xl font-bold mb-8">Technical Stack</h2>
-            <TechStack />
-          </motion.div>
-        </motion.div>
+      <main>
+        <Hero />
+        <NetworkSection />
+        <NotExposed />
+        <Timetable />
+        <StackIndex />
       </main>
       <Footer />
     </>

@@ -1,70 +1,129 @@
 @import "tailwindcss";
 
 @theme inline {
-  --color-background: #0a0a0f;
-  --color-foreground: #e4e4e7;
-  --color-muted: #71717a;
-  --color-accent: #00d4ff;
-  --color-accent-glow: rgba(0, 212, 255, 0.15);
-  --color-card: rgba(255, 255, 255, 0.03);
-  --color-card-border: rgba(255, 255, 255, 0.06);
-  --color-success: #22c55e;
-  --color-warning: #eab308;
-  --color-danger: #ef4444;
-  --font-sans: var(--font-inter);
-  --font-mono: var(--font-jetbrains);
+  --color-map: #f4f6f3;
+  --color-board: #ffffff;
+  --color-ink: #14171c;
+  --color-ink-soft: #4a5059;
+  --color-rule: #d3d7d0;
+  --color-zone: #e7ebe5;
+  --color-track-idle: #a9aeb3;
+  --color-signal: #d52b1e;
+  --color-control: #00804a;
+  --color-career: #1f3fae;
+  --color-platform: #7a2e8f;
+  --color-yellow: #ffcc00;
+  --font-sans: var(--font-overpass);
+  --font-mono: var(--font-overpass-mono);
+}
+
+:root {
+  color-scheme: light;
+  scroll-padding-top: 72px;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--color-background);
-  color: var(--color-foreground);
-  font-family: var(--font-sans);
-  min-height: 100vh;
+  background: var(--color-map);
+  color: var(--color-ink);
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: 1.0625rem;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
-/* Glassmorphism base for all cards */
-.card,
-.rounded-lg.border.border-card-border.bg-card {
-  background: var(--color-card);
-  border: 1px solid var(--color-card-border);
-  backdrop-filter: blur(12px);
+h1,
+h2,
+h3 {
+  text-wrap: balance;
 }
 
-/* Enhanced glass effect on hover */
-.card:hover,
-.rounded-lg.border.border-card-border.bg-card:hover {
-  background: rgba(255, 255, 255, 0.05);
-  box-shadow: 0 0 20px var(--color-accent-glow);
+p,
+li {
+  text-wrap: pretty;
 }
 
-@keyframes pulse-glow {
-  0%, 100% { box-shadow: 0 0 4px var(--color-accent-glow); }
-  50% { box-shadow: 0 0 12px var(--color-accent-glow); }
+::selection {
+  background: var(--color-yellow);
+  color: var(--color-ink);
 }
 
-@keyframes dash-flow {
-  to { stroke-dashoffset: -16; }
+a {
+  text-underline-offset: 0.2em;
+  text-decoration-thickness: 2px;
 }
 
-.dash-flow {
-  stroke-dasharray: 6 5;
-  animation: dash-flow 1.4s linear infinite;
+:focus-visible {
+  outline: 3px solid var(--color-ink);
+  outline-offset: 3px;
+  border-radius: 2px;
 }
 
-@keyframes scan-line {
-  0% { transform: translateY(-100%); }
-  100% { transform: translateY(100vh); }
+.on-ink :focus-visible,
+.on-ink:focus-visible {
+  outline-color: var(--color-yellow);
 }
 
-.card-glass {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+html {
+  scrollbar-color: var(--color-ink-soft) var(--color-map);
 }
 
-.card-glass:hover {
-  background: rgba(255, 255, 255, 0.05);
-  border-color: rgba(0, 212, 255, 0.2);
-  box-shadow: 0 0 24px rgba(0, 212, 255, 0.08), inset 0 1px 0 rgba(255,255,255,0.06);
+.zone-label {
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  fill: var(--color-ink-soft);
+}
+
+.readout {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-variant-numeric: tabular-nums slashed-zero;
+  font-weight: 600;
+}
+
+/* Lines draw once on load; the train marker is driven from JS. */
+@keyframes draw-line {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.draw {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+  animation: draw-line 1100ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.draw-late {
+  animation-delay: 450ms;
+}
+
+@keyframes skeleton {
+  50% {
+    opacity: 0.45;
+  }
+}
+
+.skeleton {
+  animation: skeleton 1.4s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
