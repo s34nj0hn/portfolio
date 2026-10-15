@@ -7,7 +7,7 @@ A portfolio site that serves as a live window into a production K3s cluster. Pul
 - **Stack:** Next.js 16 + TypeScript + Tailwind v4 + SWR
 - **Hosting:** Cloudflare Pages (static export) at https://portfolio-4j6.pages.dev/
 - **API:** CF Worker `throbbing-mouse-98cf` at https://throbbing-mouse-98cf.seannotpdiddyjohnson.workers.dev
-- **GitHub:** https://github.com/s34nj0hn/portfolio
+- **Repo:** Forgejo on pi5, `ssh://forgejo/s34nj0hn/portfolio.git` (https://git.s34nj0hn.dev/s34nj0hn/portfolio). The GitHub copy is frozen as of 2026-10-15.
 - **Domain (pending):** s34nj0hn.dev (bind via CF Pages custom domains)
 - **Worker source:** ~/lab/workers/cluster-metrics/throbbing-mouse-98cf/src/index.ts
 
@@ -102,7 +102,7 @@ Launch config also in .claude/launch.json (name: "portfolio", port 3456).
 - [ ] CF Web Analytics beacon script in layout.tsx
 
 ### Post-Build:
-- [ ] Set up GitHub integration for CF Pages auto-deploy on push (currently manual `wrangler pages deploy`)
+- [x] Auto-deploy on push: `.forgejo/workflows/deploy.yaml` builds on the pi5 runner and runs `wrangler pages deploy out` (secrets `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID` on the Forgejo repo)
 - [ ] Bind s34nj0hn.dev custom domain in CF Pages
 
 ## Verification Criteria
